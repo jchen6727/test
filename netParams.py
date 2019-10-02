@@ -213,7 +213,7 @@ netParams.connParams['TC->RE'] = {
 ###########################################################
 ##   GABAa receptors in intra-RE synapses                ##
 ###########################################################
-
+"""
 netParams.connParams['RE->RE'] = {
     'preConds': {'popLabel': 'RE'}, 
     'postConds': {'popLabel': 'RE'},
@@ -229,7 +229,7 @@ netParams.connParams['RE->RE'] = {
     #'probability': RE_RE_GABAA_Prob}
     'connList': cLthalamic}
     #'connList': netcons['GABAa_S']['sREsRE']} 
-
+"""
 ###########################################################
 ##   GABAa receptors in in synapses from RE to TC cells  ##
 ###########################################################
