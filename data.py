@@ -1,6 +1,7 @@
 import pickle
+import sys
 
-with open('/home/jchen/CompNeuro/myKnoxRepo/data/sim.pkl', 'rb') as fp:
+with open('data/sim.pkl', 'rb') as fp:
     nppkl = pickle.load( fp )
 
 np = {}
@@ -29,7 +30,7 @@ np['rev'] = rev
 np['spkt'] = nppkl['simData']['spkt']
 np['spkid'] = nppkl['simData']['spkid']
 
-with open('/home/jchen/CompNeuro/shared/np.pkl', 'wb') as fp:
+with open(sys.argv[1], 'wb') as fp:
     pickle.dump(np, fp)
 
-print('pkl files created')
+print('pkl file created: ' + sys.argv[1])
