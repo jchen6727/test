@@ -230,20 +230,3 @@ netParams.connParams['RE->RE'] = {
     'connList': cLthalamic}
     #'connList': netcons['GABAa_S']['sREsRE']} 
 
-###########################################################
-##   GABAa receptors in in synapses from RE to TC cells  ##
-###########################################################
-
-netParams.connParams['RE->TC_GABAA'] = {
-    'preConds': {'popLabel': 'RE'}, 
-    'postConds': {'popLabel': 'TC'},
-    #'weight': 0.00182 * gabaapercent,   # RETCa*gabaapercent*0.02/(N_TC*RE_TC_GABAA_Prob+1),         # (Destexhe, 1998)
-    'weight': gabaapercent*0.02/nRETC,                    # (Destexhe, 1998)
-    'sec': 'soma',
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    'synMech': 'GABAA_S',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': RE_TC_GABAA_Prob}
-    'connList': cLthalamic}
-    #'connList': netcons['GABAa_S']['sREsTC']} 
