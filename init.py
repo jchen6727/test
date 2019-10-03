@@ -13,6 +13,9 @@ from neuron import h
 ###############################################################################
 sim.createSimulateAnalyze(netParams = netParams.netParams, simConfig = cfg.simConfig)
 
+sim.pc.barrier()
+
+quit()
 """
 (pops, cells, conns, rxd, stims, simData) = sim.create(netParams.netParams, cfg.simConfig, output=True)
 
