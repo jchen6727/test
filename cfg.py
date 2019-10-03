@@ -9,6 +9,8 @@ str_nav_type = ['WT', 'T875M', 'W1204R', 'R1648H', 'R859C', 'knock out']
 str_drug = ['no drug', 'carbamazepine', 'oxcarbazepine', 'lamictal', 'eslicarb', 'VPA', 'diazepam'] 
 simConfig = specs.SimConfig()   # object of class SimConfig to store the simulation configuration
 
+TNUM = 20
+
 celsius = 36
 v_init = -70
 # Simulation parameters
@@ -27,10 +29,10 @@ simConfig.dt = simConfig.Dt # Internal integration timestep to use
 simConfig.hParams['celsius'] = celsius
 simConfig.hParams['v_init'] = v_init
 simConfig.seeds = {'conn': 1, 'stim': 1, 'loc': 1} # Seeds for randomizers (connectivity, input stimulation and cell locations)
-simConfig.verbose = False # True  # show detailed messages 
+simConfig.verbose = True  # show detailed messages 
 
 # Recording 
-simConfig.recordCells = [0, 49, 100, 149, 300, 349, 400, 449]  # which cells to record from
+simConfig.recordCells = [x for x in range(0, TNUM*2, int(TNUM/2))]#[0, 49, 100, 149, 300, 349, 400, 449]  # which cells to record from
 
 simConfig.recordTraces = {'V_soma':{'sec':'soma','loc':0.5,'var':'v'}
                           #'i_AMPA': {'sec':'soma', 'loc':0.5, 'synMech': 'AMPA_S', 'var': 'i', 'conds': {'pop': ['RE', 'TC', 'IN', 'PY']}},

@@ -41,45 +41,6 @@ def mkConnList( n, diam ):
             connList.append( [i, jbound] )
     return connList
 
-def mkConnListIN( n, diam ):
-    connList = []
-    for i in range(n):
-        for j in range(i-diam, i+diam+1):
-            jbound = j                      # boundary cell conditions
-            if (jbound < 0):
-                jbound = abs(j) - 1
-            if (jbound > (n-1)):
-                jbound = 2 * n - jbound - 1
-            connList.append( [i, jbound] )
-            connList.append( [i + 100, jbound])
-    return connList
-
-def mkConnListCT( nPre, nPost, diam, divergence):   #corticothalamic
-    connList = []
-    for i in range(0, nPre, divergence):        #divergence should be integer
-        for j in range( int(i/divergence)-diam, int(i/divergence)+diam+1):
-            jbound = j
-            if (jbound < 0):
-                jbound = abs(j) - 1
-            if (jbound > (nPost - 1)):
-                jbound = 2 * nPost - jbound - 1
-            connList.append( [ int(i+divergence/2), jbound ] )
-    return connList
-
-def mkConnListTC( nPre, nPost, diam, divergence):   #thalamocortical
-    connList = []
-    for i in range(nPre):
-        for j in range( ( divergence * (i-diam) ), ( divergence * (i+diam+1) ), divergence ): #divergence should be integer
-            jbound = j
-            if (jbound < 0):
-                jbound = abs(j) - divergence
-            if (jbound > (nPost - 1)):
-                jbound = 2 * nPost - jbound - divergence
-            connList.append( [i , int(jbound + divergence / 2)])
-    return connList
-                
-
-
 ###############################################################################
 #
 # MPI HH TUTORIAL PARAMS
@@ -117,10 +78,9 @@ TCIN    = 1
 ###############################################################################
 # NETWORK PARAMETERS
 ###############################################################################
-
-ncorticalcells = 100
-nthalamiccells = 100
-narrowdiam = 5
+#ncorticalcells = 100
+nthalamiccells = 20
+narrowdiam = 1
 widediam = 10
 
 
@@ -151,8 +111,8 @@ with open('netcons.json', 'r') as fp:
 # Population parameters
 ###############################################################################
 ### Cortical Cells
-netParams.popParams['PY'] = {'cellType': 'PY', 'numCells': ncorticalcells, 'cellModel': 'HH_PY'} #, 'ynormRange': [0.1, 0.3]} #, 'yRange': [1*netParams.yspacing,1*netParams.yspacing], 'gridSpacing': netParams.xspacing}
-netParams.popParams['IN'] = {'cellType': 'IN', 'numCells': (ncorticalcells * 2), 'cellModel': 'HH_IN'} #, 'ynormRange': [0.35, 0.55]} #, 'yRange': [2*netParams.yspacing,2*netParams.yspacing], 'gridSpacing': netParams.xspacing} 
+# netParams.popParams['PY'] = {'cellType': 'PY', 'numCells': ncorticalcells, 'cellModel': 'HH_PY'} #, 'ynormRange': [0.1, 0.3]} #, 'yRange': [1*netParams.yspacing,1*netParams.yspacing], 'gridSpacing': netParams.xspacing}
+# netParams.popParams['IN'] = {'cellType': 'IN', 'numCells': (ncorticalcells * 2), 'cellModel': 'HH_IN'} #, 'ynormRange': [0.35, 0.55]} #, 'yRange': [2*netParams.yspacing,2*netParams.yspacing], 'gridSpacing': netParams.xspacing} 
 
 ### Thalamic cells    
 netParams.popParams['TC'] = {'cellType': 'TC', 'numCells': nthalamiccells, 'cellModel': 'HH_TC'} #, 'ynormRange': [0.65, 0.75]} #, 'yRange': [2+3*netParams.yspacing,2+3*netParams.yspacing], 'gridSpacing': netParams.xspacing}
@@ -165,12 +125,8 @@ netParams.popParams['RE'] = {'cellType': 'RE', 'numCells': nthalamiccells, 'cell
 celsius = 36
 v_init = -70
 
-taummax = 0.15
-tauhmax = 23.12
-tausmax = 140400
-
 ### PY (single compartment)
-PYcellRule = netParams.importCellParams(label='PYrule', conds={'cellType': 'PY', 'cellModel': 'HH_PY'},	fileName='sPY.tem', cellName='sPY')
+# PYcellRule = netParams.importCellParams(label='PYrule', conds={'cellType': 'PY', 'cellModel': 'HH_PY'},	fileName='sPY.tem', cellName='sPY')
 
 ### TC (Destexhe et al., 1996; Bazhenov et al.,2002)
 TCcellRule = netParams.importCellParams(label='TCrule', conds={'cellType': 'TC', 'cellModel': 'HH_TC'}, fileName='TC.tem', cellName='sTC')
@@ -179,10 +135,10 @@ TCcellRule = netParams.importCellParams(label='TCrule', conds={'cellType': 'TC',
 REcellRule = netParams.importCellParams(label='RErule', conds={'cellType': 'RE', 'cellModel': 'HH_RE'}, fileName='RE.tem', cellName='sRE')
 
 ### IN (single compartment)
-INcellRule = netParams.importCellParams(label='INrule', conds={'cellType': 'IN', 'cellModel': 'HH_IN'},	fileName='sIN.tem', cellName='sIN')
+# INcellRule = netParams.importCellParams(label='INrule', conds={'cellType': 'IN', 'cellModel': 'HH_IN'},	fileName='sIN.tem', cellName='sIN')
 
-PYcellRule['secs']['soma']['vinit']=v_init
-netParams.cellParams['PYrule'] = PYcellRule
+# PYcellRule['secs']['soma']['vinit']=v_init
+# netParams.cellParams['PYrule'] = PYcellRule
 
 TCcellRule['secs']['soma']['vinit']=v_init
 netParams.cellParams['TCrule'] = TCcellRule
@@ -190,8 +146,8 @@ netParams.cellParams['TCrule'] = TCcellRule
 REcellRule['secs']['soma']['vinit']=v_init
 netParams.cellParams['RErule'] = REcellRule
 
-INcellRule['secs']['soma']['vinit']=v_init
-netParams.cellParams['INrule'] = INcellRule
+# INcellRule['secs']['soma']['vinit']=v_init
+# netParams.cellParams['INrule'] = INcellRule
 
 
 
@@ -214,29 +170,24 @@ netParams.synMechParams['GABAA_S'] = {'mod': 'GABAa_S', 'Alpha': 20, 'Beta': 0.1
 netParams.synMechParams['GABAB_S1'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': PYgmax }
 netParams.synMechParams['GABAB_S2'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': TCgmax }
 
-# EXP2SYN
 netParams.synMechParams['EXP2SYN'] = {'mod': 'Exp2Syn'}
-
 ###############################################################################
 # Stimulation parameters
 ###############################################################################
-
+"""
 # IClamp PY
 netParams.stimSourceParams['Input_1'] = {'type': 'IClamp', 'del': stimtime, 'dur': 100, 'amp': 0.7}
 # smallPY=1
 netParams.stimTargetParams['Input_1->PY'] = {'source': 'Input_1', 'sec':'soma', 'loc': 0.5, 
                                               'conds': {'pop':'PY', 'cellList': [i*int(ncorticalcells/5-1)+11 for i in range(int(ncorticalcells/20))]}}
-
+"""
 ###############################################################################
 # Connectivity parameters
 ###############################################################################
 
 ####################### intra cortical projections ############################
-divergence = int(ncorticalcells/nthalamiccells) # which is 1 right now
-cLcortical = mkConnList( ncorticalcells, narrowdiam)
 cLthalamic = mkConnList( nthalamiccells, narrowdiam)
-cLcortthal = mkConnListCT( ncorticalcells, nthalamiccells, widediam, divergence) #cortical -> thalamic projections
-cLthalcort = mkConnListTC( nthalamiccells, ncorticalcells, widediam, divergence) #thalamic -> cortical projections
+
 
 
 ###########################################################
@@ -252,8 +203,7 @@ netParams.connParams['TC->RE'] = {
     'delay': netParams.axondelay, 
     'loc': 0.5,
     'threshold': 0,
-    'synMech': 'EXP2SYN',
-    #'synMech': 'AMPA_S',
+    'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': TC_RE_AMPA_Prob}
     'connList': cLthalamic}
@@ -267,208 +217,15 @@ netParams.connParams['RE->RE'] = {
     'preConds': {'popLabel': 'RE'}, 
     'postConds': {'popLabel': 'RE'},
     #'weight': 0.018182,        # RERE*0.2/(N_RE*RE_RE_GABAA_Prob+1),            # (Destexhe, 1998)
-    'weight': 0.2/nRERE,            # (Destexhe, 1998)
+    'weight': 0.2/nRETC,            # (Destexhe, 1998)
     'delay': netParams.axondelay, 
     'loc': 0.5,
     'sec': 'soma',
     #'threshold': 0,
-    'synMech': 'EXP2SYN',
-    #'synMech': 'GABAA_S',
+    'synMech': 'AMPA_S',
     #'synsPerConn': 1,
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': RE_RE_GABAA_Prob}
     'connList': cLthalamic}
     #'connList': netcons['GABAa_S']['sREsRE']} 
 
-###########################################################
-##   GABAa receptors in in synapses from RE to TC cells  ##
-###########################################################
-
-netParams.connParams['RE->TC_GABAA'] = {
-    'preConds': {'popLabel': 'RE'}, 
-    'postConds': {'popLabel': 'TC'},
-    #'weight': 0.00182 * gabaapercent,   # RETCa*gabaapercent*0.02/(N_TC*RE_TC_GABAA_Prob+1),         # (Destexhe, 1998)
-    'weight': gabaapercent*0.02/nRETC,                    # (Destexhe, 1998)
-    'sec': 'soma',
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    #'synMech': 'GABAA_S',
-    'synMech': 'EXP2SYN',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': RE_TC_GABAA_Prob}
-    'connList': cLthalamic}
-    #'connList': netcons['GABAa_S']['sREsTC']} 
-
-###########################################################
-##   GABAb receptors in in synapses from RE to TC cells  ##
-###########################################################
-
-
-##GABAB netParams.connParams['RE->TC_GABAB'] = {
-##GABAB     'nonLinear': True,
-##GABAB     'preConds': {'popLabel': 'RE'}, 
-##GABAB     'postConds': {'popLabel': 'TC'},
-##GABAB     #'weight': RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1),         # (Destexhe, 1998)
-##GABAB     #'weight': 0.04,         # (Destexhe, 1998)
-##GABAB     'weight': 1,
-##GABAB     'sec': 'soma',
-##GABAB     'delay': netParams.axondelay, 
-##GABAB     'loc': 0.5,
-##GABAB     'synMech': 'GABAB_S2',
-##GABAB     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-##GABAB     #'probability': RE_TC_GABAB_Prob}
-##GABAB     'connList': cLthalamic}
-##GABAB     #'connList': netcons['GABAb_S']['sREsTC']}
-
-
-###########################################################
-##   Glutamate AMPA receptors in synapses from PY to PY  ##
-###########################################################
-
-netParams.connParams['PY->PY_AMPA'] = {
-    'preConds': {'popLabel': 'PY'}, 
-    'postConds': {'popLabel': 'PY'},
-    #'weight': 0.054545,        # PYPY*0.6/(N_PY*PY_PY_AMPA_Prob+1),            # (Destexhe, 1998)
-    'weight': 0.6/nPYPY,            # (Destexhe, 1998)
-    'sec': 'soma',
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    'synMech': 'EXP2SYN',
-    #'synMech': 'AMPA_S_PYPY',
-    'connList': cLcortical}
-    #'connList': netcons['AMPA_S']['sPYsPY']}
-
-###########################################################
-##   Glutamate AMPA receptors in synapses from PY to IN  ##
-###########################################################
-     
-PYINconnlist = cLcortical + [ [x, y + 100] for x, y in cLcortical ]
-netParams.connParams['PY->IN_AMPA'] = {
-    'preConds': {'popLabel': 'PY'}, 
-    'postConds': {'popLabel': 'IN'},
-    #'weight': 0.018182,        # PYIN*0.2/(N_IN*PY_IN_AMPA_Prob+1),            # (Destexhe, 1998)       
-    'weight': 0.2/nPYIN,            # (Destexhe, 1998)       
-    'sec': 'soma',
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    'synMech': 'EXP2SYN',
-    #'synMech': 'AMPA_S',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': PY_IN_AMPA_Prob}
-    'connList': PYINconnlist}
-    #'connList': netcons['AMPA_S']['sPYsIN']}
-
-###########################################################
-##   GABAa receptors in synapses from IN to PY cells     ##
-###########################################################
-
-INPYconnlist = cLcortical + [ [x + 100, y] for x, y in cLcortical ]
-netParams.connParams['IN->PY_GABAA'] = {
-    'preConds': {'popLabel': 'IN'}, 
-    'postConds': {'popLabel': 'PY'},
-    #'weight': 0.02727 * gabaapercent,     # INPYa*gabaapercent*0.3/(N_PY*IN_PY_GABAA_Prob+1),         # (Destexhe, 1998)
-    'weight': gabaapercent*0.3/nINPY,         # (Destexhe, 1998)
-    'sec': 'soma',
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    #'synMech': 'GABAA_S',
-    'synMech': 'EXP2SYN',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': IN_PY_GABAA_Prob}
-    'connList': INPYconnlist}
-    #'connList': netcons['GABAa_S']['sINsPY']}
-
-###########################################################
-##   GABAb receptors in in synapses from IN to PY cells  ##
-###########################################################
-
-##GABAB netParams.connParams['IN->PY_GABAB'] = {
-##GABAB     'nonLinear': True,
-##GABAB     'preConds': {'popLabel': 'IN'}, 
-##GABAB     'postConds': {'popLabel': 'PY'},
-##GABAB     #'weight': INPYb*gababpercent*0.03/(N_PY*IN_PY_GABAB_Prob+1),         # (Destexhe, 1998)
-##GABAB     #'weight': 0.03,         # (Destexhe, 1998)
-##GABAB     'weight': 1,
-##GABAB     'sec': 'soma',
-##GABAB     'delay': netParams.axondelay, 
-##GABAB     'loc': 0.5,
-##GABAB     'synMech': 'GABAB_S1',
-##GABAB     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-##GABAB     #'probability': IN_PY_GABAB_Prob}
-##GABAB     'connList': INPYconnlist}
-##GABAB     #'connList': netcons['GABAa_S']['sINsPY']}
-
-
-###########################################################
-##   GABAa receptors in synapses from IN to IN cells     ##
-###########################################################
-
-ININconnlist = [ [ x, x + 100] for x in range(100) ] + [ [ x + 100, x] for x in range(100) ]
-netParams.connParams['IN->IN_GABAA'] = {
-    'preConds': {'popLabel': 'IN'}, 
-    'postConds': {'popLabel': 'IN'},
-    'weight': 0,               # ININa*1/(N_IN*IN_IN_GABAA_Prob+1),       
-    #'weight': gabaapercent*0.15,         # (Destexhe, 1998)
-    'sec': 'soma',
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    'synMech': 'EXP2SYN',
-    #'synMech': 'GABAA_S',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': IN_PY_GABAA_Prob}
-    'connList': ININconnlist}
-    #'connList': netcons['GABAa_S']['sINsIN']}
-
-###########################################################
-##   Glutamate AMPA receptors in synapses from PY to RE  ##
-###########################################################
-
-netParams.connParams['PY->RE'] = {
-    'preConds': {'popLabel': 'PY'}, 
-    'postConds': {'popLabel': 'RE'},
-    #'weight': 0.057143,       # PYRE*1.2/(N_RE*PY_RE_AMPA_Prob+1),           # (Destexhe, 1998)  
-    'weight': 1.2/nPYRE,           # (Destexhe, 1998)  
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    'synMech': 'EXP2SYN',
-    #'synMech': 'AMPA_S',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': PY_RE_AMPA_Prob}
-    'connList': cLcortthal}
-    #'connList': netcons['AMPA_S']['sPYsRE']} 
-
-###########################################################
-##   Glutamate AMPA receptors in synapses from PY to TC  ##
-###########################################################
-
-netParams.connParams['PY->TC'] = {
-    'preConds': {'popLabel': 'PY'}, 
-    'postConds': {'popLabel': 'TC'},
-    #'weight': 0.000476,        # PYTC*0.01/(N_TC*PY_TC_AMPA_Prob+1),           # (Destexhe, 1998)    
-    'weight': 0.01/nPYTC,           # (Destexhe, 1998)    
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    'synMech': 'EXP2SYN',
-    #'synMech': 'AMPA_S',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': PY_TC_AMPA_Prob}
-    'connList': cLcortthal}
-    #'connList': netcons['AMPA_S']['sPYsTC']}   
-
-###########################################################
-##   Glutamate AMPA receptors in synapses from TC to PY  ##
-###########################################################
-
-netParams.connParams['TC->PY'] = {
-    'preConds': {'popLabel': 'TC'}, 
-    'postConds': {'popLabel': 'PY'},
-    #'weight': 0.057143,    # TCPY*1.2/(N_PY*TC_PY_AMPA_Prob+1),        # (Destexhe, 1998)   
-    'weight': 1.2/nTCPY,        # (Destexhe, 1998)   
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    'synMech': 'EXP2SYN',
-    #'synMech': 'AMPA_S',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': TC_PY_AMPA_Prob}
-    'connList': cLthalcort}
-    #'connList': netcons['AMPA_S']['sTCsPY']}
