@@ -25,4 +25,5 @@ nc1.sort(key=sortFunc)
 
 nc2.sort(key=sortFunc)
 
-if (nc1 == nc2)
+print("evaluating " + str(len(nc1)) + " conns!")
+print("conns match!") if (nc1 == nc2) else print("conns do not match!")
