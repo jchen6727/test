@@ -4,10 +4,12 @@ import sys
 print('comparing pkl files: ' + sys.argv[1] + '<=>' + sys.argv[2])
 
 with open(sys.argv[1], 'rb') as sim1fp:
-    sim1 = pickle.load( sim1fp )
+    pkl1 = pickle.load( sim1fp )
+sim1 = pkl1['simData']['V_soma']
 
 with open(sys.argv[2], 'rb') as sim2fp:
-    sim2 = pickle.load( sim2fp )
+    pkl2 = pickle.load( sim2fp )
+sim2 = pkl2['simData']['V_soma']
 
 dur = len(sim1[ list(sim1.keys())[0] ])
 for cell in sim1.keys():
