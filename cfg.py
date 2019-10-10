@@ -12,18 +12,15 @@ celsius = 36
 v_init = -70
 # Simulation parameters
 simConfig.trans = 0000
-simConfig.Dt = 0.1
+simConfig.Dt = 0.1# / 4
 simConfig.steps_per_ms = 1/simConfig.Dt
-simConfig.npoints = 6000
-
-graphstart = 0
-graphstop  = simConfig.npoints / 10
+simConfig.npoints = 6000# * 4
 
 simConfig.duration = simConfig.npoints * simConfig.Dt # simConfig.trans + simConfig.npoints * simConfig.Dt # Duration of the simulation, in ms
 simConfig.dt = simConfig.Dt # Internal integration timestep to use
 simConfig.hParams['celsius'] = celsius
 simConfig.hParams['v_init'] = v_init
-simConfig.verbose = True  # show detailed messages 
+simConfig.verbose = False#True  # show detailed messages 
 
 # Recording 
 simConfig.recordCells = [x for x in range(0, TNUM, int(TNUM/8))]
