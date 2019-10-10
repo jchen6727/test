@@ -76,7 +76,7 @@ cLthalamic = mkConnList( nthalamiccells, narrowdiam)
 ##   Glutamate AMPA receptors in synapses from TC to RE  ##
 ###########################################################
 
-netParams.connParams['TC->RE'] = {
+netParams.connParams['TC->TC'] = {
     'preConds': {'popLabel': 'TC'}, 
     'postConds': {'popLabel': 'RE'},
     'weight': 0.2/nTCRE,         # (Destexhe, 1998)  

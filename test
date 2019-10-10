@@ -1,7 +1,10 @@
 #!/bin/bash
-./hpc 4 init.py > conns4
-mv data/sim.pkl sim4
-./hpc 1 init.py > conns1
-mv data/sim.pkl sim1
-python compare.py sim1 sim4
-python parseConns.py conns1 conns4
+./hpc $1 init.py > conns$1
+mv data/sim.pkl sim$1
+python gather.py $1
+./hpc $2 init.py > conns$2
+mv data/sim.pkl sim$2
+python gather.py $2
+python compare.py sim$1 sim$2
+python parseConns.py conns$1 conns$2
+python ddiff.py secsg$1 secsg$2

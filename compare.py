@@ -1,7 +1,7 @@
 import pickle
 import sys
 
-print('comparing pkl files: ' + sys.argv[1] + '<=>' + sys.argv[2])
+print('comparing voltage data in pkl files: ' + sys.argv[1] + '<=>' + sys.argv[2])
 
 with open(sys.argv[1], 'rb') as sim1fp:
     pkl1 = pickle.load( sim1fp )

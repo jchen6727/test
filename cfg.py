@@ -6,7 +6,7 @@ from netpyne import specs
 
 simConfig = specs.SimConfig()   # object of class SimConfig to store the simulation configuration
 
-TNUM = 20
+TNUM = 40
 
 celsius = 36
 v_init = -70
@@ -26,7 +26,7 @@ simConfig.hParams['v_init'] = v_init
 simConfig.verbose = True  # show detailed messages 
 
 # Recording 
-simConfig.recordCells = [x for x in range(0, TNUM*2, int(TNUM/2))]
+simConfig.recordCells = [x for x in range(0, TNUM, int(TNUM/8))]
 
 simConfig.recordTraces = {'V_soma':{'sec':'soma','loc':0.5,'var':'v'}}
 simConfig.recordStim = True  # record spikes of cell stims
