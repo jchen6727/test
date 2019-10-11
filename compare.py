@@ -12,7 +12,8 @@ with open(sys.argv[2], 'rb') as sim2fp:
 sim2 = pkl2['simData']['V_soma']
 
 dur = len(sim1[ list(sim1.keys())[0] ])
-print('sim ran for ' + str(dur) + ' timesteps')
+print('sim collected ' + str(dur) + ' datapoints'
+)
 for cell in sim1.keys():
     print('=== ' + cell + ' ===')
     deltas = [ [x , sim1[cell][x] - sim2[cell][x] ] for x in range(dur) ]

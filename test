@@ -1,12 +1,9 @@
 #!/bin/bash
 ./hpc $1 init.py
 mv data/sim.pkl sim$1
-python gather.py secs $1
-#python gather.py nets $1
+
 ./hpc $2 init.py
 mv data/sim.pkl sim$2
-python gather.py secs $2
-#python gather.py nets $2
+
 python compare.py sim$1 sim$2
-python ddiff.py secsg$1 secsg$2
-#python ddiff.py netsg$1 netsg$2
+

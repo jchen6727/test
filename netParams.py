@@ -3,43 +3,19 @@ from netpyne import sim
 
 netParams = specs.NetParams()   # object of class NetParams to store the network parameters
 
-def mkConnList( n, diam ):
-    connList = []
-    for i in range(n):
-        for j in range(i-diam, i+diam+1):
-            jbound = j                      # boundary cell conditions
-            if (jbound < 0):
-                jbound = abs(j) - 1
-            if (jbound > (n-1)):
-                jbound = 2 * n - jbound - 1
-            connList.append( [i, jbound] )
-    return connList
-
-###############################################################################
-#
-# MPI HH TUTORIAL PARAMS
-#
-###############################################################################
-
 ###############################################################################
 # NETWORK PARAMETERS
 ###############################################################################
 
-nthalamiccells = 20
-narrowdiam = 1
-
-nRETC = 2 * narrowdiam + 1 # for weight
-nTCRE = 2 * narrowdiam + 1 # for weight
-
 netParams.defaultThreshold = 0
 netParams.defaultDelay = 2
+
 ###############################################################################
 # Population parameters
 ###############################################################################
-
-### Thalamic cells    
-netParams.popParams['TC'] = {'cellType': 'TC', 'numCells': nthalamiccells, 'cellModel': 'HH_TC'} #, 'ynormRange': [0.65, 0.75]} #, 'yRange': [2+3*netParams.yspacing,2+3*netParams.yspacing], 'gridSpacing': netParams.xspacing}
-netParams.popParams['RE'] = {'cellType': 'RE', 'numCells': nthalamiccells, 'cellModel': 'HH_RE'} #, 'ynormRange': [0.8, 0.9]} #, 'yRange': [2+4*netParams.yspacing,2+4*netParams.yspacing], 'gridSpacing': netParams.xspacing}
+    
+netParams.popParams['TC'] = {'cellType': 'TC', 'numCells': 20, 'cellModel': 'HH_TC'} 
+netParams.popParams['RE'] = {'cellType': 'RE', 'numCells': 20, 'cellModel': 'HH_RE'} 
 
 ###############################################################################
 # Cell parameters list
@@ -67,10 +43,10 @@ netParams.cellParams['RErule'] = REcellRule
 netParams.synMechParams['AMPA_S'] = {'mod': 'AMPA_S', 'Alpha': 0.94, 'Beta': 0.18, 'Cmax': 0.5, 'Cdur': 0.3, 'Erev': 0}
 
 ###############################################################################
-# Connectivity parameters
+# Connection List
 ###############################################################################
 
-cLthalamic = mkConnList( nthalamiccells, narrowdiam)
+cLthalamic = [[0, 0],[0, 0],[0, 1],[1, 0],[1, 1],[1, 2],[2, 1],[2, 2],[2, 3],[3, 2],[3, 3],[3, 4],[4, 3],[4, 4],[4, 5],[5, 4],[5, 5],[5, 6],[6, 5],[6, 6],[6, 7],[7, 6],[7, 7],[7, 8],[8, 7],[8, 8],[8, 9],[9, 8],[9, 9],[9, 10],[10, 9],[10, 10],[10, 11],[11, 10],[11, 11],[11, 12],[12, 11],[12, 12],[12, 13],[13, 12],[13, 13],[13, 14],[14, 13],[14, 14],[14, 15],[15, 14],[15, 15],[15, 16],[16, 15],[16, 16],[16, 17],[17, 16],[17, 17],[17, 18],[18, 17],[18, 18],[18, 19],[19, 18],[19, 19],[19, 19]]
 
 ###########################################################
 ##   Glutamate AMPA receptors in synapses from TC to RE  ##
@@ -79,7 +55,7 @@ cLthalamic = mkConnList( nthalamiccells, narrowdiam)
 netParams.connParams['TC->TC'] = {
     'preConds': {'popLabel': 'TC'}, 
     'postConds': {'popLabel': 'RE'},
-    'weight': 0.2/nTCRE,         # (Destexhe, 1998)  
+    'weight': 0.2/ 3,         # (Destexhe, 1998)  
     'sec': 'soma',
     'delay': 2,
     'loc': 0.5,
@@ -94,11 +70,10 @@ netParams.connParams['TC->TC'] = {
 netParams.connParams['RE->RE'] = {
     'preConds': {'popLabel': 'RE'}, 
     'postConds': {'popLabel': 'RE'},
-    'weight': 0.2/nRETC,            # (Destexhe, 1998)
+    'weight': 0.2/ 3,            # (Destexhe, 1998)
     'delay': 2,
     'loc': 0.5,
     'sec': 'soma',
     'threshold': 0,
     'synMech': 'AMPA_S',
     'connList': cLthalamic}
-

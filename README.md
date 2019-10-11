@@ -1,29 +1,16 @@
-Demonstration of issue arising in multicore simulations -- multicore on 4 processors behaves differently than multicore on 1 processor.
+Demonstration of an issue arising in multicore simulations that seems to be linked to dt = 0.1
+Multicore run on 4 processors behaves differently than multicore run on 1 processor.
 
 command:
-./test 4 1
+./test 1 4
 
-demonstrates the issue by running multicore simulation of netpyne model on 4 cores then 1 core and comparing voltage output
+demonstrates the issue by running multicore simulation of netpyne model on 1 cores then 4 cores and comparing voltage output
+change dt to either 0.05 or 0.025 and the simulation output matches
 
-connection data printed by simConfig.verbose is saved to conns4 (4 cores) and conns1 (1 core)
+has an init, cfg and netParams python file describing network in netpyne, associated mod files for the cells and channels
 
-simulation data to sim4 (4 cores) and sim1 (1 core)
+as well as a compare python file that compares simulation output
 
-compare.py checks that the voltage data is identical between sim1 and sim4
+there is a debugging branch which contains additional code for debugging
 
-parseConns.py checks that the connection data is identical between conns1 and conns4
-
-gather.py gathers section data from psection from multicore simulations
-
-ddiff.py runs a deep diff of any data structures
-
-can also do
-
-./test 2 1
-
-to see that 2 core and 1 core simulation match
-
-./test 4 2
-
-to see that 4 core and 2 core simulation do not match
-
+git checkout debugging
