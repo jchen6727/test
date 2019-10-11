@@ -5,7 +5,7 @@ netParams.defaultThreshold, netParams.defaultDelay, celsius, v_init = 0, 2, 36, 
 netParams.popParams['EA'] = {'cellType': 'EA', 'numCells': 20, 'cellModel': 'HH_EA'} 
 netParams.popParams['EB'] = {'cellType': 'EB', 'numCells': 20, 'cellModel': 'HH_EB'} 
 
-netParams.cellParams['EArule'] =netParams.importCellParams(label='EArule', conds={'cellType': 'EA', 'cellModel': 'HH_EA'}, fileName='EA.tem', cellName='sEA') EAcellRule
+netParams.cellParams['EArule'] =netParams.importCellParams(label='EArule', conds={'cellType': 'EA', 'cellModel': 'HH_EA'}, fileName='EA.tem', cellName='sEA')
 netParams.cellParams['EArule']['secs']['soma']['vinit']=v_init
 netParams.cellParams['EBrule'] = netParams.importCellParams(label='EBrule', conds={'cellType': 'EB', 'cellModel': 'HH_EB'}, fileName='EB.tem', cellName='sEB')
 netParams.cellParams['EBrule']['secs']['soma']['vinit']=v_init

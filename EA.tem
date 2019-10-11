@@ -1,40 +1,4 @@
-/*--------------------------------------------------------------
-	TEMPLATE FILE FOR DEFINING THALAMOCORTICAL NEURONS
-	--------------------------------------------------
-
-	One compartment model and currents derived from:
-
- 	McCormick, D.A. and Huguenard, J.R.  A model of the 
-	electrophysiological properties of thalamocortical relay neurons.  
-	J. Neurophysiology 68: 1384-1400, 1992.
-
-	- passive: parameters idem Rinzel
-	- HH: Traub with higher threshold
-	- IT: m2h, nernst, tau_h modified with double exponential
-	- Ih: Huguenard with Ca++ dependence added, Ca++-binding protein
-	- Ca++: simple decay, faster than McCormick
-
-
-	This model is described in detail in:
-
-	Destexhe, A., Bal, T., McCormick, D.A. and Sejnowski, T.J.
-	Ionic mechanisms underlying synchronized oscillations and propagating
-	waves in a model of ferret thalamic slices. Journal of Neurophysiology
-	76: 2049-2070, 1996.
-	See also http://www.cnl.salk.edu/~alain , http://cns.fmed.ulaval.ca
-
-
-	Alain Destexhe, Salk Institute and Laval University, 1995
-
---------------------------------------------------------------*/
-
-
-print " "
-print " << defining template for one-compartment sTC cell >> "
-print " "
-
-
-begintemplate sTC		// create a new template object
+begintemplate sEA		// create a new template object
 public soma, kl, ampapost, gabaapost, gababpost, PYlist, TClist, REgabaalist, REgabablist
 
 objectvar ampapost, gabaapost, gababpost, PYlist, TClist, REgabaalist, REgabablist
@@ -119,13 +83,8 @@ kl = new kleak()
 	gababpost = new List()
 
   }
-
-  print " "
-  print "<< sTC: passive, Kleak, INa, IK, IT, Ih-CAM and Ca++ decay inserted >>"
-  print " "
-
 }
-endtemplate sTC
+endtemplate sEA
 
 
 

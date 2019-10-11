@@ -1,46 +1,4 @@
-/*--------------------------------------------------------------
-	TEMPLATE FILE FOR DEFINING RETICULAR NEURONS
-	--------------------------------------------
-
-	One compartment model and currents derived from:
-
-	Destexhe, A., Contreras, D., Sejnowski, T.J. and Steriade, M.
-	A model of spindle rhythmicity in the isolated thalamic reticular
-	nucleus.  J. Neurophysiol. 72: 803-818, 1994.
-
-	Destexhe, A., Contreras, D., Steriade, M., Sejnowski, T.J.,
-	and Huguenard, J.R.  In vivo, in vitro and computational analysis of 
-	dendritic calcium currents in thalamic reticular neurons.  
-	Journal of Neuroscience 16: 169-185, 1996.
-
-	Modifications:
-
-	- passive parameters estimated from simplex
-	- IT2: Q10=2.5, strong conductance for broad bursts
-	- no IK[Ca], no ICAN
-	- Ca++: simple decay only
-
-
-	This model is described in detail in:
-
-	Destexhe, A., Bal, T., McCormick, D.A. and Sejnowski, T.J.
-	Ionic mechanisms underlying synchronized oscillations and propagating
-	waves in a model of ferret thalamic slices. Journal of Neurophysiology
-	76: 2049-2070, 1996.
-	See also http://www.cnl.salk.edu/~alain , http://cns.fmed.ulaval.ca
-
-
-	Alain Destexhe, Salk Institute and Laval University, 1995
-
---------------------------------------------------------------*/
-
-
-print " "
-print " << defining template for one-compartment sRE cell >> "
-print " "
-
-
-begintemplate sRE		// create a new template object
+begintemplate sEB
 public soma, ampapost, gabaapost, PYlist, TClist, REgabaalist
 
 objectvar ampapost, gabaapost, PYlist, TClist, REgabaalist
@@ -106,13 +64,5 @@ proc init() { local v_potassium, v_sodium
 	REgabaalist = new List()
 
   }
-
-  print " "
-  print "<< sRE: passive, INa, IK, ITs, IAHP and Ca++ decay inserted >>"
-  print " "
-
 }
-endtemplate sRE
-
-
-
+endtemplate sEB
