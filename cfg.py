@@ -8,11 +8,9 @@ simConfig.npoints = 6000# * 4
 simConfig.duration = 400
 simConfig.hParams['celsius'], simConfig.hParams['v_init']  = 36, -70
 
-# Recording 
 simConfig.recordCells = [x for x in range(0, 40, 5)]
 simConfig.recordTraces = {'V_soma':{'sec':'soma','loc':0.5,'var':'v'}}
-simConfig.recordStim = True  # record spikes of cell stims
+simConfig.recordStim = True
 simConfig.recordStep = simConfig.dt 
 simConfig.saveFolder, simConfig.simLabel = "data", "sim"
-simConfig.runStopAt = simConfig.duration
 
