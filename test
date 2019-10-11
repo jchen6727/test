@@ -1,9 +1,8 @@
 #!/bin/bash
-./hpc $1 init.py
+
+mpiexec -n $1 nrniv -python -mpi init.py
 mv data/sim.pkl sim$1
-
-./hpc $2 init.py
+mpiexec -n $2 nrniv -python -mpi init.py
 mv data/sim.pkl sim$2
-
 python compare.py sim$1 sim$2
 
